@@ -1,0 +1,5 @@
+odometry_diff_drive_params:
+  odom_diff_drive_thresholds:
+    "x_threshold": 0.0065447960
+    "y_threshold": 0.003
+    "z_threshold": 0.004
