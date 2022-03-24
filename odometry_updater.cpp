@@ -4,66 +4,258 @@
 #include <nav_msgs/Odometry.h>
 #include <sstream>
 
-float x = 0.0;
-float x_threshold = 0.0;
-float y = 0.0;
-float y_threshold = 0.0;
-float z = 0.0;
-float z_threshold = 0.0;
+float x_pose_position = 0.0;
+float x_pose_position_threshold = 0.0;
+float y_pose_position = 0.0;
+float y_pose_position_threshold = 0.0;
+float z_pose_position = 0.0;
+float z_pose_position_threshold = 0.0;
 
-void positionCallback(const nav_msgs::Odometry::ConstPtr& msg)
+float x_pose_orientation = 0.0;
+float x_pose_orientation_threshold = 0.0;
+float y_pose_orientation = 0.0;
+float y_pose_orientation_threshold = 0.0;
+float z_pose_orientation = 0.0;
+float z_pose_orientation_threshold = 0.0;
+float w_pose_orientation = 0.0;
+float w_pose_orientation_threshold = 0.0;
+
+float x_twist_linear = 0.0;
+float x_twist_linear_threshold = 0.0;
+float y_twist_linear = 0.0;
+float y_twist_linear_threshold = 0.0;
+float z_twist_linear = 0.0;
+float z_twist_linear_threshold = 0.0;
+
+float x_twist_angular = 0.0;
+float x_twist_angular_threshold = 0.0;
+float y_twist_angular = 0.0;
+float y_twist_angular_threshold = 0.0;
+float z_twist_angular = 0.0;
+float z_twist_angular_threshold = 0.0;
+
+
+void posePositionCallback(const nav_msgs::Odometry::ConstPtr& msg)
 {
-  x = msg->pose.pose.position.x;
-  y = msg->pose.pose.position.y;
-  z = msg->pose.pose.position.z;
+  x_pose_position = msg->pose.pose.position.x;
+  y_pose_position = msg->pose.pose.position.y;
+  z_pose_position = msg->pose.pose.position.z;
+
+  x_pose_orientation = msg->pose.pose.orientation.x;
+  y_pose_orientation = msg->pose.pose.orientation.y;
+  z_pose_orientation = msg->pose.pose.orientation.z;
+  w_pose_orientation = msg->pose.pose.orientation.w;
+
+  x_twist_linear = msg->twist.twist.linear.x;
+  y_twist_linear = msg->twist.twist.linear.y;
+  z_twist_linear = msg->twist.twist.linear.z;
+
+  x_twist_angular = msg->twist.twist.angular.x;
+  y_twist_angular = msg->twist.twist.angular.y;
+  z_twist_angular = msg->twist.twist.angular.z;
+
 }
 
-void x_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
+void xPosePositionDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
-  if (x > x_threshold)
+  if (x_pose_position > x_pose_position_threshold)
     
-    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore x ha superato %f", x_threshold);
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore x ha superato %f", x_pose_position_threshold);
   else
     
-    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Va tutto bene x: %f", x);
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Va tutto bene x: %f", x_pose_position);
 
   
   stat.add("Diagnostica di esempio", "Controllo del valore della x");
-  std::ostringstream x_string;
-  x_string << x;
-  stat.addf("Posizione x:", x_string.str().c_str());
+  std::ostringstream x_pose_position_string;
+  x_pose_position_string << x_pose_position;
+  stat.addf("Posizione x:", x_pose_position_string.str().c_str());
 }
 
-void y_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
+void yPosePositionDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
-  if (y > y_threshold)
+  if (y_pose_position > y_pose_position_threshold)
     
-    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore y ha superato %f", y_threshold);
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore y ha superato %f", y_pose_position_threshold);
   else
     
-    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Va tutto bene y: %f", y);
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Va tutto bene y: %f", y_pose_position);
+
   
-   
   stat.add("Diagnostica di esempio", "Controllo del valore della y");
-  std::ostringstream y_string;
-  y_string << y;
-  stat.addf("Posizione y:", y_string.str().c_str());
+  std::ostringstream y_pose_position_string;
+  y_pose_position_string << y_pose_position;
+  stat.addf("Posizione y:", y_pose_position_string.str().c_str());
 }
 
-void z_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
+void zPosePositionDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
-  if (z > z_threshold)
+  if (z_pose_position > z_pose_position_threshold)
     
-    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore z ha superato %f", z_threshold);
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore z ha superato %f", z_pose_position_threshold);
   else
     
-    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Va tutto bene z: %f", z);
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Va tutto bene z: %f", z_pose_position);
+
   
-   
   stat.add("Diagnostica di esempio", "Controllo del valore della z");
-  std::ostringstream z_string;
-  z_string << z;
-  stat.addf("Posizione z:", z_string.str().c_str());
+  std::ostringstream z_pose_position_string;
+  z_pose_position_string << z_pose_position;
+  stat.addf("Posizione z:", z_pose_position_string.str().c_str());
+}
+
+void xPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
+{
+  if (x_pose_orientation > x_pose_orientation_threshold)
+    
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore x ha superato %f", x_pose_orientation_threshold);
+  else
+    
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Va tutto bene x: %f", x_pose_orientation);
+
+  
+  stat.add("Diagnostica di esempio", "Controllo del valore della x");
+  std::ostringstream x_pose_orientation_string;
+  x_pose_orientation_string << x_pose_orientation;
+  stat.addf("Posizione x:", x_pose_orientation_string.str().c_str());
+}
+
+void yPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
+{
+  if (y_pose_orientation > y_pose_orientation_threshold)
+    
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore y ha superato %f", y_pose_orientation_threshold);
+  else
+    
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Va tutto bene y: %f", y_pose_orientation);
+
+  
+  stat.add("Diagnostica di esempio", "Controllo del valore della y");
+  std::ostringstream y_pose_orientation_string;
+  y_pose_orientation_string << y_pose_orientation;
+  stat.addf("Posizione y:", y_pose_orientation_string.str().c_str());
+}
+
+void zPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
+{
+  if (z_pose_orientation > z_pose_orientation_threshold)
+  
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore z ha superato %f", z_pose_orientation_threshold);
+  else
+    
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Va tutto bene z: %f", z_pose_orientation);
+
+  
+  stat.add("Diagnostica di esempio", "Controllo del valore della z");
+  std::ostringstream z_pose_orientation_string;
+  z_pose_orientation_string << z_pose_orientation;
+  stat.addf("Posizione z:", z_pose_orientation_string.str().c_str());
+}
+
+void wPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
+{
+  if (w_pose_orientation > w_pose_orientation_threshold)
+  
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore w ha superato %f", w_pose_orientation_threshold);
+  else
+    
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Va tutto bene w: %f", w_pose_orientation);
+
+  
+  stat.add("Diagnostica di esempio", "Controllo del valore della w");
+  std::ostringstream w_pose_orientation_string;
+  w_pose_orientation_string << w_pose_orientation;
+  stat.addf("Posizione w:", w_pose_orientation_string.str().c_str());
+}
+
+void xTwistLinearDiagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
+{
+  if (x_twist_linear > x_twist_linear_threshold)
+  
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore x ha superato %f", x_twist_linear_threshold);
+  else
+    
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Va tutto bene x: %f", x_twist_linear_threshold);
+  
+  stat.add("Diagnostica di esempio", "Controllo del valore della x");
+  std::ostringstream x_twist_linear_string;
+  x_twist_linear_string << x_twist_linear;
+  stat.addf("Posizione x:", x_twist_linear_string.str().c_str());
+}
+
+void yTwistLinearDiagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
+{
+  if (y_twist_linear > y_twist_linear_threshold)
+  
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore y ha superato %f", y_twist_linear_threshold);
+  else
+    
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Va tutto bene y: %f", y_twist_linear_threshold);
+  
+  stat.add("Diagnostica di esempio", "Controllo del valore della y");
+  std::ostringstream y_twist_linear_string;
+  y_twist_linear_string << y_twist_linear;
+  stat.addf("Posizione y:", y_twist_linear_string.str().c_str());
+}
+
+void zTwistLinearDiagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
+{
+  if (z_twist_linear > z_twist_linear_threshold)
+  
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore z ha superato %f", z_twist_linear_threshold);
+  else
+    
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Va tutto bene z: %f", z_twist_linear_threshold);
+  
+  stat.add("Diagnostica di esempio", "Controllo del valore della z");
+  std::ostringstream z_twist_linear_string;
+  z_twist_linear_string << z_twist_linear;
+  stat.addf("Posizione z:", z_twist_linear_string.str().c_str());
+}
+
+void xTwistAngularDiagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
+{
+  if (x_twist_angular > x_twist_angular_threshold)
+  
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore x ha superato %f", x_twist_angular_threshold);
+  else
+    
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Va tutto bene x: %f", x_twist_angular_threshold);
+  
+  stat.add("Diagnostica di esempio", "Controllo del valore della x");
+  std::ostringstream x_twist_angular_string;
+  x_twist_angular_string << x_twist_angular;
+  stat.addf("Posizione x:", x_twist_angular_string.str().c_str());
+}
+
+void yTwistAngularDiagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
+{
+  if (y_twist_angular > y_twist_angular_threshold)
+  
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore y ha superato %f", y_twist_angular_threshold);
+  else
+    
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Va tutto bene y: %f", y_twist_angular_threshold);
+  
+  stat.add("Diagnostica di esempio", "Controllo del valore della y");
+  std::ostringstream y_twist_angular_string;
+  y_twist_angular_string << y_twist_angular;
+  stat.addf("Posizione y:", y_twist_angular_string.str().c_str());
+}
+
+void zTwistAngularDiagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
+{
+  if (z_twist_angular > z_twist_angular_threshold)
+  
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore z ha superato %f", z_twist_angular_threshold);
+  else
+    
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Va tutto bene z: %f", z_twist_angular_threshold);
+  
+  stat.add("Diagnostica di esempio", "Controllo del valore della z");
+  std::ostringstream z_twist_angular_string;
+  z_twist_angular_string << z_twist_angular;
+  stat.addf("Posizione z:", z_twist_angular_string.str().c_str());
 }
 
 int main(int argc, char **argv)
@@ -73,14 +265,42 @@ int main(int argc, char **argv)
   
   diagnostic_updater::Updater updater;
   updater.setHardwareID("diff_drive_controller/odom");
-  nh.getParam("/odometry_diff_drive_params/odom_diff_drive_thresholds/x_threshold", x_threshold);
-  nh.getParam("/odometry_diff_drive_params/odom_diff_drive_thresholds/y_threshold", y_threshold);
-  nh.getParam("/odometry_diff_drive_params/odom_diff_drive_thresholds/z_threshold", z_threshold);
-  ros::Subscriber sub = nh.subscribe("diff_drive_controller/odom", 1000, positionCallback);
+
+  nh.getParam("/odometry_diff_drive_params/odom_diff_drive_pose_position/x_threshold", x_pose_position_threshold);
+  nh.getParam("/odometry_diff_drive_params/odom_diff_drive_pose_position/y_threshold", y_pose_position_threshold);
+  nh.getParam("/odometry_diff_drive_params/odom_diff_drive_pose_position/z_threshold", z_pose_position_threshold);
+
+  nh.getParam("/odometry_diff_drive_params/odom_diff_drive_pose_orientation/x_threshold", x_pose_orientation_threshold);
+  nh.getParam("/odometry_diff_drive_params/odom_diff_drive_pose_orientation/y_threshold", y_pose_orientation_threshold);
+  nh.getParam("/odometry_diff_drive_params/odom_diff_drive_pose_orientation/z_threshold", z_pose_orientation_threshold);
+  nh.getParam("/odometry_diff_drive_params/odom_diff_drive_pose_orientation/w_threshold", w_pose_orientation_threshold);
+
+  nh.getParam("/odometry_diff_drive_params/odom_diff_drive_twist_linear/x_threshold", x_twist_linear_threshold);
+  nh.getParam("/odometry_diff_drive_params/odom_diff_drive_twist_linear/y_threshold", y_twist_linear_threshold);
+  nh.getParam("/odometry_diff_drive_params/odom_diff_drive_twist_linear/z_threshold", z_twist_linear_threshold);
+
+  nh.getParam("/odometry_diff_drive_params/odom_diff_drive_twist_angular/x_threshold", x_twist_angular_threshold);
+  nh.getParam("/odometry_diff_drive_params/odom_diff_drive_twist_angular/y_threshold", y_twist_angular_threshold);
+  nh.getParam("/odometry_diff_drive_params/odom_diff_drive_twist_angular/z_threshold", z_twist_angular_threshold);
+
+  ros::Subscriber sub = nh.subscribe("diff_drive_controller/odom", 1000, posePositionCallback);
   
-  updater.add("Funzione di diagnostica della x", x_diagnostic);
-  updater.add("Funzione di diagnostica della y", y_diagnostic);
-  updater.add("Funzione di diagnostica della z", z_diagnostic);
+  updater.add("Funzione di diagnostica della x pose position", xPosePositionDiagostic);
+  updater.add("Funzione di diagnostica della y pose position", yPosePositionDiagostic);
+  updater.add("Funzione di diagnostica della z pose position", zPosePositionDiagostic);
+
+  updater.add("Funzione di diagnostica della x pose orientation", xPoseOrientationDiagostic);
+  updater.add("Funzione di diagnostica della y pose orientation", yPoseOrientationDiagostic);
+  updater.add("Funzione di diagnostica della z pose orientation", zPoseOrientationDiagostic);
+  updater.add("Funzione di diagnostica della w pose orientation", wPoseOrientationDiagostic);
+
+  updater.add("Funzione di diagnostica della x twist linear", xTwistLinearDiagnostic);
+  updater.add("Funzione di diagnostica della y twist linear", yTwistLinearDiagnostic);
+  updater.add("Funzione di diagnostica della z twist linear", zTwistLinearDiagnostic);
+
+  updater.add("Funzione di diagnostica della x twist angular", xTwistAngularDiagnostic);
+  updater.add("Funzione di diagnostica della y twist angular", yTwistAngularDiagnostic);
+  updater.add("Funzione di diagnostica della z twist angular", zTwistAngularDiagnostic);
 
   while (nh.ok())
   {
