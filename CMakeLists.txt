@@ -13,7 +13,9 @@ catkin_package(DEPENDS diagnostic_msgs roscpp std_msgs
 include_directories(include ${catkin_INCLUDE_DIRS})
 
 add_executable(odometry_updater src/odometry_updater.cpp)
+add_executable(laser_scan_updater src/laser_scan_updater.cpp)
 target_link_libraries(odometry_updater ${catkin_LIBRARIES})
+target_link_libraries(laser_scan_updater ${catkin_LIBRARIES})
 
 catkin_add_gtest(diagnostic_updater_test test/diagnostic_updater_test.cpp)
 target_link_libraries(diagnostic_updater_test ${catkin_LIBRARIES})
