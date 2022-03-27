@@ -1,0 +1,15 @@
+imu_params:
+  orientation_threshold:
+    "x_threshold": 0009
+    "y_threshold": 0004
+    "z_threshold": 0001
+    "w_threshold": 1.001
+  angular_velocity_threshold:
+    "x_threshold": 0.0
+    "y_threshold": 0.0
+    "z_threshold": 0.0
+  linear_acceleration_threshold:
+    "x_threshold": 0.0
+    "y_threshold": 0.0
+    "z_threshold": 0.0
+
