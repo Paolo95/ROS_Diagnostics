@@ -7,6 +7,5 @@ scan_params:
     "scan_time_threshold": 0.1
     "range_min_threshold": 0.2
     "range_max_threshold": 5
-    "ranges_threshold": 'inf'
 
 
