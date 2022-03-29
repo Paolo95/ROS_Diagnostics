@@ -139,39 +139,24 @@ void range_max_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
 }
 
-
-
 void ranges_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
-
-/*
-  int rangesSize = sizeof(ranges)/sizeof(ranges[0]);
-
-  for(int i = 0; i < rangesSize; i++){
-
-    if(ranges[i] < range_min) stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "range ERROR! val: %f, < threshold: %f", ranges[i], range_min);
-    if(ranges[i] > range_max) stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "range ERROR! val: %f, > threshold: %f", ranges[i], range_max);
-    if(ranges[i] > range_min && ranges[i] < range_max) stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "range OK val: %f, > %f && < %f", ranges[i], range_min, range_max);
-
-  }
-
-*/
-
-
-
-  //for(std::size_t i = 0; i < ranges.size(); ++i) {
-  for(int i = 0; i < ranges.size(); ++i) {
-    //ROS_INFO("size: %d", ranges.size());
-
-}
-
-
-
-  stat.add("Diagnostica di esempio", "Controllo dei valori dell'array ranges del laser");
-  //std::ostringstream string;
-  //string << i;
-  //stat.addf("ranges:", string.str().c_str());
-
+  for(int i=0; i < ranges.size(); i++){
+    if (ranges[i] < range_min || ranges[i] > range_max ){
+           
+      stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "range fuori soglia. Range_min: %f, Range_max: %f", range_min,range_max);
+      stat.add("Diagnostica di esempio", "Valore i-esimo del vettore ranges");
+      std::ostringstream ranges_string, index_string;
+      ranges_string << ranges[i];
+      index_string << i;
+      stat.addf("ranges["+ index_string.str() + "]", ranges_string.str().c_str());
+      index_string.str("");
+      ranges_string.str("");
+    
+    }else if (ranges[i] > range_min && ranges[i] < range_max){
+      stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "range OK val: %f, > %f && < %f", ranges[i], range_min, range_max);
+    }
+  }  
 }
 
 
