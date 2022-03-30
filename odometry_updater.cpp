@@ -10,6 +10,7 @@ float y_pose_position = 0.0;
 float y_pose_position_threshold = 0.0;
 float z_pose_position = 0.0;
 float z_pose_position_threshold = 0.0;
+float pose_covariance = 0.0;
 
 float x_pose_orientation = 0.0;
 float x_pose_orientation_threshold = 0.0;
@@ -40,6 +41,8 @@ void posePositionCallback(const nav_msgs::Odometry::ConstPtr& msg)
   x_pose_position = msg->pose.pose.position.x;
   y_pose_position = msg->pose.pose.position.y;
   z_pose_position = msg->pose.pose.position.z;
+
+  //pose_covariance = msg->pose.covariance[1];
 
   x_pose_orientation = msg->pose.pose.orientation.x;
   y_pose_orientation = msg->pose.pose.orientation.y;
