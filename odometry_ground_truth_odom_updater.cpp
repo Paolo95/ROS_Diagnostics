@@ -289,7 +289,7 @@ int main(int argc, char **argv)
   ground_truth_nh.getParam("/ground_truth_params/ground_truth_twist_angular/y_threshold", y_gt_twist_angular_threshold);
   ground_truth_nh.getParam("/ground_truth_params/ground_truth_twist_angular/z_threshold", z_gt_twist_angular_threshold);
     
-  ros::Subscriber sub = ground_truth_nh.subscribe("odometry/ekf_local", 1000, gtPosePositionCallback);
+  ros::Subscriber sub = ground_truth_nh.subscribe("odometry/ground_truth_odom", 1000, gtPosePositionCallback);
   
   ground_truth_updater.add("Funzione di diagnostica della x ground truth pose position", xGtPosePositionDiagostic);
   ground_truth_updater.add("Funzione di diagnostica della y ground truth pose position", yGtPosePositionDiagostic);
