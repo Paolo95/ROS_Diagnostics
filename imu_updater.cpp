@@ -47,9 +47,9 @@ void imuCallback(const sensor_msgs::Imu::ConstPtr& msg)
 void x_imu_orientation_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
   if(x_imu_orientation > x_imu_orientation_threshold) 
-    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore x_orientation e' fuori soglia! Valore limite: %f", x_imu_orientation_threshold);
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore x_imu_orientation e' fuori soglia! Valore limite: %f", x_imu_orientation_threshold);
   else 
-    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Il valore rientra nella norma, x_orientation: %f", x_imu_orientation);
+    stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Il valore rientra nella norma, x_imu_orientation: %f", x_imu_orientation);
 
   stat.add("Diagnostica IMU", "Valore");
   std::ostringstream x_imu_orientation_string;
@@ -97,7 +97,7 @@ void w_imu_orientation_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &s
 
 void x_imu_angular_velocity_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
-  if(x_imu_angular_velocity > x_imu_angular_velocity_threshold) 
+  if(x_imu_angular_velocity > x_imu_angular_velocity_threshold)
     stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore x_imu_angular_velocity e' fuori soglia! Valore limite: %f", x_imu_angular_velocity_threshold);
   else 
     stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "Il valore rientra nella norma, x_imu_angular_velocity: %f", x_imu_angular_velocity);
@@ -199,17 +199,18 @@ int main(int argc, char **argv)
 
   ros::Subscriber sub = nh_imu.subscribe("/imu/data", 1000, imuCallback);
 
-  imu_updater.add("Funzione di diagnostica della IMU", x_imu_orientation_diagnostic);
-  imu_updater.add("Funzione di diagnostica della IMU", y_imu_orientation_diagnostic);
-  imu_updater.add("Funzione di diagnostica della IMU", z_imu_orientation_diagnostic);
+  imu_updater.add("Funzione di diagnostica della IMU orientation", x_imu_orientation_diagnostic);
+  imu_updater.add("Funzione di diagnostica della IMU orientation", y_imu_orientation_diagnostic);
+  imu_updater.add("Funzione di diagnostica della IMU orientation", z_imu_orientation_diagnostic);
+  imu_updater.add("Funzione di diagnostica della IMU orientation", w_imu_orientation_diagnostic);
 
-  imu_updater.add("Funzione di diagnostica della IMU", x_imu_angular_velocity_diagnostic);
-  imu_updater.add("Funzione di diagnostica della IMU", y_imu_angular_velocity_diagnostic);
-  imu_updater.add("Funzione di diagnostica della IMU", z_imu_angular_velocity_diagnostic);
+  imu_updater.add("Funzione di diagnostica della IMU angular velocity", x_imu_angular_velocity_diagnostic);
+  imu_updater.add("Funzione di diagnostica della IMU angular velocity", y_imu_angular_velocity_diagnostic);
+  imu_updater.add("Funzione di diagnostica della IMU angular velocity", z_imu_angular_velocity_diagnostic);
 
-  imu_updater.add("Funzione di diagnostica della IMU", x_imu_linear_acceleration_diagnostic);
-  imu_updater.add("Funzione di diagnostica della IMU", y_imu_linear_acceleration_diagnostic);
-  imu_updater.add("Funzione di diagnostica della IMU", z_imu_linear_acceleration_diagnostic);
+  imu_updater.add("Funzione di diagnostica della IMU linear acceleration", x_imu_linear_acceleration_diagnostic);
+  imu_updater.add("Funzione di diagnostica della IMU linear acceleration", y_imu_linear_acceleration_diagnostic);
+  imu_updater.add("Funzione di diagnostica della IMU linear acceleration", z_imu_linear_acceleration_diagnostic);
 
 
   while (nh_imu.ok())

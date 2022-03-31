@@ -9,14 +9,8 @@
 #include <vector>
 
 
-// TODO ==========================================================================================================
 /*
 * data types e mini guida per hokuyo: http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/LaserScan.html
-*
-* aggiusta ranges, che sul yaml è una stringa e qua è un array di float
-* vedi intensities che non so se viene pubblicato dal sensore
-* 
-*
 *
 */
 
@@ -28,9 +22,8 @@ float angle_increment = 0.0;
 float scan_time = 0.0;
 float range_min = 0.0;
 float range_max = 0.0;
-//float ranges[256] = {0.0};
 std::vector<float> ranges;
-//float[] intensities;
+std::vector<float> intensities;
 
 
 // valori delle soglie e inizializzazione
@@ -52,6 +45,7 @@ void scanCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
   range_min = msg->range_min;
   range_max = msg->range_max;
   ranges = msg->ranges;
+  intensities = msg->intensities;
 
 
   //ROS_INFO("ranges: %d", ranges.size());
@@ -159,6 +153,26 @@ void ranges_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
   }  
 }
 
+void intensities_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
+
+  for(int i=0; i < intensities.size(); i++){
+    if (intensities[i] < range_min || intensities[i] > range_max ){
+           
+      stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "intensity fuori soglia. Range_min: %f, Range_max: %f", range_min,range_max);
+      stat.add("Diagnostica di esempio", "Valore i-esimo del vettore intensities");
+      std::ostringstream intensities_string, index_string;
+      intensities_string << intensities[i];
+      index_string << i;
+      stat.addf("intensities["+ index_string.str() + "]", intensities_string.str().c_str());
+      index_string.str("");
+      intensities_string.str("");
+    
+    }else if (intensities[i] > range_min && intensities[i] < range_max){
+      stat.summaryf(diagnostic_msgs::DiagnosticStatus::OK, "range OK val: %f, > %f && < %f", intensities[i], range_min, range_max);
+    }
+  }  
+
+}
 
 int main(int argc, char **argv)
 {
@@ -174,8 +188,6 @@ int main(int argc, char **argv)
   nh_scan.getParam("/scan_params/scan_thresholds/scan_time_threshold", scan_time_threshold);
   nh_scan.getParam("/scan_params/scan_thresholds/range_min_threshold", range_min_threshold);
   nh_scan.getParam("/scan_params/scan_thresholds/range_max_threshold", range_max_threshold);
-  //nh_scan.getParam("/scan_params/scan_thresholds/ranges", ranges_threshold);
-  //nh_scan.getParam("/scan_params/scan_thresholds/angle_min_threshold", angle_min_threshold);
 
   ros::Subscriber sub = nh_scan.subscribe("/scan", 1000, scanCallback);
 
@@ -186,6 +198,7 @@ int main(int argc, char **argv)
   scan_updater.add("Funzione di diagnostica di range_min", range_min_diagnostic);
   scan_updater.add("Funzione di diagnostica di range_max", range_max_diagnostic);
   scan_updater.add("Funzione di diagnostica di ranges", ranges_diagnostic);
+  scan_updater.add("Funzione di diagnostica di intensities", intensities_diagnostic);
 
 
   while (nh_scan.ok())
