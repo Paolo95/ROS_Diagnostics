@@ -12,8 +12,6 @@ void RightJointCallback(const control_msgs::PidState::ConstPtr& msg)
 {
   
     right_wheel_joint_values = msg->output;
-  //right_wheel_joint_values[0] = msg->position;//pose.pose.position.x;
-  //ROS_INFO("Right joint values: %f", right_wheel_joint_values);
 }
 
 void RightJointDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
@@ -29,7 +27,7 @@ void RightJointDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
   stat.add("Diagnostica right_wheel_joint", "Valore");
   std::ostringstream right_wheel_joint_values_string;
   right_wheel_joint_values_string << right_wheel_joint_values;
-  stat.addf("x Pose Position", right_wheel_joint_values_string.str().c_str());
+  stat.addf("Right Wheel output", right_wheel_joint_values_string.str().c_str());
 }
 
 int main(int argc, char **argv)
