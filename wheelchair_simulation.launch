@@ -50,23 +50,37 @@
 	<node pkg="rviz" type="rviz" name="rviz" args="-d $(find wheelchair_description)/config/wheelchair_base.rviz" unless="$(arg navigation)"/>
 
 	<!-- Parte Diagnostica-->
+	
+	<node pkg="diagnostic_updater" type="imu_updater" name="imu_updater" output="screen"></node>
 	<node pkg="diagnostic_updater" type="odometry_updater" name="odometry_updater" output="screen"></node>
 	<node pkg="diagnostic_updater" type="cmd_vel_updater" name="cmd_vel_updater" output="screen"></node>
-	<node pkg="diagnostic_updater" type="laser_scan_updater" name="laser_scan_updater" output="screen"></node>
-	<node pkg="diagnostic_updater" type="imu_updater" name="imu_updater" output="screen"></node>
+	<node pkg="diagnostic_updater" type="laser_scan_updater" name="laser_scan_updater" output="screen"></node>	
 	<node pkg="diagnostic_updater" type="joint_right_wheel" name="joint_right_wheel" output="screen"></node>
 	<node pkg="diagnostic_updater" type="joint_left_wheel" name="joint_left_wheel" output="screen"></node>
 	<node pkg="diagnostic_updater" type="odometry_ekf_updater" name="odometry_ekf_updater" output="screen"></node>
 	<node pkg="diagnostic_updater" type="odometry_ground_truth_odom_updater" name="odometry_ground_truth_odom_updater" output="screen"></node>
+	
+	<node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator" >
+			<rosparam command="load" file="$(find diagnostic_aggregator)/config/wheelchair_aggregator.yaml" />
+		</node>
+	
+	<rosparam command="load" file="$(find diagnostic_updater)/config/imu_threshold.yaml" />
 	<rosparam command="load" file="$(find diagnostic_updater)/config/odometry_diff_drive_threshold.yaml" />
 	<rosparam command="load" file="$(find diagnostic_updater)/config/cmd_vel_threshold.yaml" />
 	<rosparam command="load" file="$(find diagnostic_updater)/config/ekf_local_odometry_threshold.yaml" />
 	<rosparam command="load" file="$(find diagnostic_updater)/config/ground_truth_odom_threshold.yaml" />
-	<rosparam command="load" file="$(find diagnostic_updater)/config/scan_threshold.yaml" />
-	<rosparam command="load" file="$(find diagnostic_updater)/config/imu_threshold.yaml" />
+	<rosparam command="load" file="$(find diagnostic_updater)/config/scan_threshold.yaml" />	
 	<rosparam command="load" file="$(find diagnostic_updater)/config/right_joint_wheel.yaml" />
 	<rosparam command="load" file="$(find diagnostic_updater)/config/left_joint_wheel.yaml" />
-	
-	<!-- rqt monitor-->	
+		
+	<!-- rqt runtime monitor-->
 	<node pkg="rqt_runtime_monitor" type="rqt_runtime_monitor" name="runtime_monitor" />
+	
+
+	<!-- rqt robot monitor-->
+	
+	<node pkg="rqt_robot_monitor" type="rqt_robot_monitor" name="rqt_robot_monitor" />
+	
+
+
 </launch>
