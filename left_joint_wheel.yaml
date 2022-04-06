@@ -1,3 +1,8 @@
 left_joint_wheel_params:
   left_joint_wheel_thresholds:
-    "left_wheel_joint_values_threshold": 5
+    "output": 5
+    "p_error" : 1
+    "i_error" : 1
+    "d_error" : 1
+    "error" : 1
+    "error_dot" : 1
