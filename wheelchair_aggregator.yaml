@@ -31,6 +31,12 @@ analyzers:
         timeout: 5.0
         find_and_remove_prefix: laser_scan_updater
         num_items: 8
+      camera:
+        type: GenericAnalyzer
+        path: Camera
+        timeout: 5.0
+        find_and_remove_prefix: cam_updater
+        num_items: 1
       imu:
         type: GenericAnalyzer
         path: IMU
