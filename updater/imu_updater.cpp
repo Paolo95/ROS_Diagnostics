@@ -232,11 +232,17 @@ int main(int argc, char **argv)
 
   /*
 
-    
+    Il metodo subscribe permette di sottoscriversi al topic /imu/data per estrarne i messaggi. Il metodo richiama la funzione imuCallback.
 
   */
 
   ros::Subscriber sub = nh_imu.subscribe("/imu/data", 1000, imuCallback);
+
+  /*
+  
+    Il metodo add permette la creazione del diagnostico invocando la funzione che effettuerà il rilevamento a soglia.
+
+  */
 
   imu_updater.add("Funzione di diagnostica della IMU orientation", x_imu_orientation_diagnostic);
   imu_updater.add("Funzione di diagnostica della IMU orientation", y_imu_orientation_diagnostic);
