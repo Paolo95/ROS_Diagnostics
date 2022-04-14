@@ -1,8 +1,22 @@
+/*
+
+  Il codice implementa il nodo updater per il cmd_vel della carrozzina. 
+  Raccoglie i dati dal topic /diff_drive_controller/cmd_vel ed effettua un rilevamento a soglia per individuare potenziali guasti dovuti a valori anomali dei sensori.
+  I messaggi diagnostici vengono pubblicati sul topic /diagnostics.
+
+*/
+
 #include <diagnostic_updater/diagnostic_updater.h>
 #include <std_msgs/Bool.h>
 #include <diagnostic_updater/publisher.h>
 #include <sstream>
 #include <geometry_msgs/Twist.h>
+
+/*
+
+  Variabili globali per la memorizzazione dei valori attuali dei sensori e delle soglie.
+
+*/
 
 float x_cmd_vel_linear = 0.0;
 float x_cmd_vel_linear_threshold = 0.0;
@@ -18,6 +32,11 @@ float y_cmd_vel_angular_threshold = 0.0;
 float z_cmd_vel_angular = 0.0;
 float z_cmd_vel_angular_threshold = 0.0;
 
+/*
+
+  La cmd_vel_callback permette di salvare nelle variabili globali i valori correnti dei sensori.
+
+*/
 
 void cmd_vel_callback(const geometry_msgs::Twist::ConstPtr& msg)
 {
@@ -30,6 +49,12 @@ void cmd_vel_callback(const geometry_msgs::Twist::ConstPtr& msg)
   z_cmd_vel_angular = msg->angular.z;
 }
 
+/*
+
+  La funzione x_cmd_vel_linear_diagnostic implementa il rilevamento a soglia per la variabile x_cmd_vel_linear creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void x_cmd_vel_linear_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
@@ -46,6 +71,13 @@ void x_cmd_vel_linear_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &st
 
 }
 
+/*
+
+  La funzione y_cmd_vel_linear_diagnostic implementa il rilevamento a soglia per la variabile y_cmd_vel_linear creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void y_cmd_vel_linear_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
   if(y_cmd_vel_linear > y_cmd_vel_linear_threshold) 
@@ -60,6 +92,13 @@ void y_cmd_vel_linear_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &st
   stat.addf("y_cmd_vel_linear", y_cmd_vel_linear_string.str().c_str());
 
 }
+
+/*
+
+  La funzione z_cmd_vel_linear_diagnostic implementa il rilevamento a soglia per la variabile z_cmd_vel_linear creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void z_cmd_vel_linear_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
@@ -76,6 +115,13 @@ void z_cmd_vel_linear_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &st
 
 }
 
+/*
+
+  La funzione x_cmd_vel_angular_diagnostic implementa il rilevamento a soglia per la variabile x_cmd_vel_angular creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void x_cmd_vel_angular_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
   if(x_cmd_vel_angular > x_cmd_vel_angular_threshold) 
@@ -91,6 +137,13 @@ void x_cmd_vel_angular_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &s
 
 }
 
+/*
+
+  La funzione y_cmd_vel_angular_diagnostic implementa il rilevamento a soglia per la variabile y_cmd_vel_angular creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void y_cmd_vel_angular_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
   if(y_cmd_vel_angular > y_cmd_vel_angular_threshold) 
@@ -105,6 +158,13 @@ void y_cmd_vel_angular_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &s
   stat.addf("y_cmd_vel_angular", y_cmd_vel_angular_string.str().c_str());
 
 }
+
+/*
+
+  La funzione z_cmd_vel_angular_diagnostic implementa il rilevamento a soglia per la variabile z_cmd_vel_angular creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void z_cmd_vel_angular_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
@@ -130,6 +190,12 @@ int main(int argc, char **argv)
   diagnostic_updater::Updater vel_upd_updater;
   vel_upd_updater.setHardwareID("/diff_drive_controller/cmd_vel");
 
+  /*
+    
+    Caricamento delle variabili globali con le soglie ottenute dai valori raccolti dal file YAML di configurazione.
+
+  */
+
   nh_vel_upd.getParam("/cmd_vel_thresholds/linear/x_threshold", x_cmd_vel_linear_threshold);
   nh_vel_upd.getParam("/cmd_vel_thresholds/linear/y_threshold", y_cmd_vel_linear_threshold);
   nh_vel_upd.getParam("/cmd_vel_thresholds/linear/z_threshold", z_cmd_vel_linear_threshold);
@@ -138,8 +204,19 @@ int main(int argc, char **argv)
   nh_vel_upd.getParam("/cmd_vel_thresholds/angular/y_threshold", y_cmd_vel_angular_threshold);
   nh_vel_upd.getParam("/cmd_vel_thresholds/angular/z_threshold", z_cmd_vel_angular_threshold);
 
+  /*
+
+    Il metodo subscribe permette di sottoscriversi al topic /imu/data per estrarne i messaggi. Il metodo richiama la funzione imuCallback.
+
+  */
+
   ros::Subscriber sub = nh_vel_upd.subscribe("/diff_drive_controller/cmd_vel", 1000, cmd_vel_callback);
 
+  /*
+  
+    Il metodo add permette la creazione del diagnostico invocando la funzione che effettuerà il rilevamento a soglia.
+
+  */
   vel_upd_updater.add("Funzione di diagnostica di x_cmd_vel_linear", x_cmd_vel_linear_diagnostic);
   vel_upd_updater.add("Funzione di diagnostica di y_cmd_vel_linear", y_cmd_vel_linear_diagnostic);
   vel_upd_updater.add("Funzione di diagnostica di z_cmd_vel_linear", z_cmd_vel_linear_diagnostic);
