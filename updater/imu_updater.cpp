@@ -14,7 +14,7 @@
 
 /*
 
-  Variabili globali per la memorizzazione dei valori attuali dei sensori.
+  Variabili globali per la memorizzazione dei valori attuali dei sensori e delle soglie.
 
 */
 
@@ -276,7 +276,7 @@ int main(int argc, char **argv)
 
   /*
     
-    Caricamento dele variabili globali delle soglie con i valori raccolti dal file YAML di configurazione
+    Caricamento delle variabili globali con le soglie ottenute dai valori raccolti dal file YAML di configurazione.
 
   */
 

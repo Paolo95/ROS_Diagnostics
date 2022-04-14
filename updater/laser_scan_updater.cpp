@@ -1,3 +1,11 @@
+/*
+
+  Il codice implementa il nodo updater per il laser scanner della carrozzina. 
+  Raccoglie i dati dal topic /scan ed effettua un rilevamento a soglia per individuare potenziali guasti dovuti a valori anomali dei sensori.
+  I messaggi diagnostici vengono pubblicati sul topic /diagnostics.
+
+*/
+
 #include <diagnostic_updater/diagnostic_updater.h>
 #include <std_msgs/Bool.h>
 #include <diagnostic_updater/publisher.h>
@@ -8,14 +16,12 @@
 #include <stdlib.h>
 #include <vector>
 
-
 /*
-* data types e mini guida per hokuyo: http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/LaserScan.html
-*
+
+  Variabili globali per la memorizzazione dei valori attuali dei sensori e delle soglie.
+
 */
 
-
-// valori attuali dei sensori
 float angle_min = 0.0;
 float angle_max = 0.0;
 float angle_increment = 0.0;
@@ -25,8 +31,6 @@ float range_max = 0.0;
 std::vector<float> ranges;
 std::vector<float> intensities;
 
-
-// valori delle soglie e inizializzazione
 float angle_min_threshold = 0.0;
 float angle_max_threshold = 0.0;
 float angle_increment_threshold = 0.0;
@@ -34,6 +38,11 @@ float scan_time_threshold = 0.0;
 float range_min_threshold = 0.0;
 float range_max_threshold = 0.0;
 
+/*
+
+  La scanCallback permette di salvare nelle variabili globali i valori correnti dei sensori.
+
+*/
 
 void scanCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
@@ -47,13 +56,15 @@ void scanCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
   ranges = msg->ranges;
   intensities = msg->intensities;
 
-
-  //ROS_INFO("ranges: %d", ranges.size());
-
 }
 
 
-// DIAGNOSTICA SCANNER ====================================================================================
+/*
+
+  La funzione angle_min_diagnostic implementa il rilevamento a soglia per la variabile angle_min creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void angle_min_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
@@ -68,6 +79,13 @@ void angle_min_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
 }
 
+/*
+
+  La funzione angle_max_diagnostic implementa il rilevamento a soglia per la variabile angle_max creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void angle_max_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
   if(angle_max > angle_max_threshold) stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "angle_max ERROR! val: %f, threshold: %f", angle_max, angle_max_threshold);
@@ -80,6 +98,13 @@ void angle_max_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
   stat.addf("angle_max:", string.str().c_str());
 
 }
+
+/*
+
+  La funzione angle_increment_diagnostic implementa il rilevamento a soglia per la variabile angle_increment creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void angle_increment_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
@@ -94,6 +119,13 @@ void angle_increment_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &sta
 
 }
 
+/*
+
+  La funzione scan_time_diagnostic implementa il rilevamento a soglia per la variabile scan_time creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void scan_time_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
   if(scan_time > scan_time_threshold) stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "scan_time ERROR! val: %f, threshold: %f", scan_time, scan_time_threshold);
@@ -106,6 +138,13 @@ void scan_time_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
   stat.addf("scan_time:", string.str().c_str());
 
 }
+
+/*
+
+  La funzione range_min_diagnostic implementa il rilevamento a soglia per la variabile range_min creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void range_min_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
@@ -120,6 +159,13 @@ void range_min_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
 }
 
+/*
+
+  La funzione range_max_diagnostic implementa il rilevamento a soglia per la variabile range_max creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void range_max_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
   if(range_max > range_max_threshold) stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "range_max ERROR! val: %f, threshold: %f", range_max, range_max_threshold);
@@ -132,6 +178,15 @@ void range_max_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
   stat.addf("range_max:", string.str().c_str());
 
 }
+
+/*
+
+  La funzione ranges_diagnostic implementa il rilevamento a soglia per la variabile ranges creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+
+  Il messaggio contiene una tabella che riporta soltato i valori di ranges fuori soglia.
+  
+*/
 
 void ranges_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
@@ -152,6 +207,15 @@ void ranges_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
     }
   }  
 }
+
+/*
+
+  La funzione intensities_diagnostic implementa il rilevamento a soglia per la variabile intensities creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+
+  Il messaggio contiene una tabella che riporta soltato i valori di intensities fuori soglia.
+  
+*/
 
 void intensities_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
@@ -182,6 +246,12 @@ int main(int argc, char **argv)
   diagnostic_updater::Updater scan_updater;
   scan_updater.setHardwareID("/scan");
 
+  /*
+    
+    Caricamento delle variabili globali con le soglie ottenute dai valori raccolti dal file YAML di configurazione.
+
+  */
+
   nh_scan.getParam("/scan_params/scan_thresholds/angle_min_threshold", angle_min_threshold);
   nh_scan.getParam("/scan_params/scan_thresholds/angle_max_threshold", angle_max_threshold);
   nh_scan.getParam("/scan_params/scan_thresholds/angle_increment_threshold", angle_increment_threshold);
@@ -189,8 +259,19 @@ int main(int argc, char **argv)
   nh_scan.getParam("/scan_params/scan_thresholds/range_min_threshold", range_min_threshold);
   nh_scan.getParam("/scan_params/scan_thresholds/range_max_threshold", range_max_threshold);
 
+  /*
+
+    Il metodo subscribe permette di sottoscriversi al topic /scan per estrarne i messaggi. Il metodo richiama la funzione scanCallback.
+
+  */
+
   ros::Subscriber sub = nh_scan.subscribe("/scan", 1000, scanCallback);
 
+  /*
+  
+    Il metodo add permette la creazione del diagnostico invocando la funzione che effettuerà il rilevamento a soglia.
+
+  */
   scan_updater.add("Funzione di diagnostica di angle_min", angle_min_diagnostic);
   scan_updater.add("Funzione di diagnostica di angle_max", angle_max_diagnostic);
   scan_updater.add("Funzione di diagnostica di angle_increment", angle_increment_diagnostic);

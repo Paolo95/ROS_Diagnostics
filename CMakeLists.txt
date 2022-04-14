@@ -12,6 +12,8 @@ catkin_package(DEPENDS diagnostic_msgs roscpp std_msgs
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
+# Caricamento dei file cpp dei nodi Updater
+
 add_executable(cam_updater src/cam_updater.cpp)
 add_executable(odometry_updater src/odometry_updater.cpp)
 add_executable(laser_scan_updater src/laser_scan_updater.cpp)
@@ -21,6 +23,9 @@ add_executable(joint_left_wheel src/joint_left_wheel.cpp)
 add_executable(cmd_vel_updater src/cmd_vel_updater.cpp)
 add_executable(odometry_ekf_updater src/odometry_ekf_updater.cpp)
 add_executable(odometry_ground_truth_odom_updater src/odometry_ground_truth_odom_updater.cpp)
+
+# Caricamento delle librerie per ogni nodo Updater
+
 target_link_libraries(cam_updater ${catkin_LIBRARIES})
 target_link_libraries(odometry_updater ${catkin_LIBRARIES})
 target_link_libraries(laser_scan_updater ${catkin_LIBRARIES})
