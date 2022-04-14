@@ -82,8 +82,15 @@ void x_imu_orientation_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &s
   stat.add("Diagnostica IMU", "Valore");    
   std::ostringstream x_imu_orientation_string;                              // creazione di una variabile di tipo ostringstream
   x_imu_orientation_string << x_imu_orientation;                            // con l'operatore << si carica la stringa all'interno della variabile ostringstream
-  stat.addf("x_imu_orientation", x_imu_orientation_string.str().c_str());
+  stat.addf("x_imu_orientation", x_imu_orientation_string.str().c_str());   // si effettua il cast al tipo c_str come richiesto dal metodo addf
 }
+
+/*
+
+  La funzione y_imu_orientation_diagnostic implementa il rilevamento a soglia per la variabile y_imu_orientation creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void y_imu_orientation_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
@@ -98,6 +105,13 @@ void y_imu_orientation_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &s
   stat.addf("y_imu_orientation", y_imu_orientation_string.str().c_str());
 }
 
+/*
+
+  La funzione z_imu_orientation_diagnostic implementa il rilevamento a soglia per la variabile z_imu_orientation creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void z_imu_orientation_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
   if(z_imu_orientation > z_imu_orientation_threshold) 
     stat.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "Il valore z_orientation e' fuori soglia! Valore limite: %f", z_imu_orientation_threshold);
@@ -109,6 +123,13 @@ void z_imu_orientation_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &s
   z_imu_orientation_string << z_imu_orientation;
   stat.addf("z_imu_orientation", z_imu_orientation_string.str().c_str());
 }
+
+/*
+
+  La funzione w_imu_orientation_diagnostic implementa il rilevamento a soglia per la variabile w_imu_orientation creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void w_imu_orientation_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
@@ -123,6 +144,13 @@ void w_imu_orientation_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &s
   stat.addf("w_imu_orientation", w_imu_orientation_string.str().c_str());
 }
 
+/*
+
+  La funzione x_imu_angular_velocity_diagnostic implementa il rilevamento a soglia per la variabile x_imu_angular_velocity creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void x_imu_angular_velocity_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
   if(x_imu_angular_velocity > x_imu_angular_velocity_threshold)
@@ -135,6 +163,13 @@ void x_imu_angular_velocity_diagnostic(diagnostic_updater::DiagnosticStatusWrapp
   x_imu_angular_velocity_string << x_imu_angular_velocity;
   stat.addf("x_imu_angular_velocity", x_imu_angular_velocity_string.str().c_str());
 }
+
+/*
+
+  La funzione y_imu_angular_velocity_diagnostic implementa il rilevamento a soglia per la variabile y_imu_angular_velocity creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void y_imu_angular_velocity_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
@@ -149,6 +184,13 @@ void y_imu_angular_velocity_diagnostic(diagnostic_updater::DiagnosticStatusWrapp
   stat.addf("y_imu_angular_velocity", y_imu_angular_velocity_string.str().c_str());
 }
 
+/*
+
+  La funzione z_imu_angular_velocity_diagnostic implementa il rilevamento a soglia per la variabile z_imu_angular_velocity creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void z_imu_angular_velocity_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
   if(z_imu_angular_velocity > z_imu_angular_velocity_threshold) 
@@ -161,6 +203,13 @@ void z_imu_angular_velocity_diagnostic(diagnostic_updater::DiagnosticStatusWrapp
   z_imu_angular_velocity_string << z_imu_angular_velocity;
   stat.addf("z_imu_angular_velocity", z_imu_angular_velocity_string.str().c_str());
 }
+
+/*
+
+  La funzione x_imu_linear_acceleration_diagnostic implementa il rilevamento a soglia per la variabile x_imu_linear_acceleration creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void x_imu_linear_acceleration_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
@@ -175,6 +224,13 @@ void x_imu_linear_acceleration_diagnostic(diagnostic_updater::DiagnosticStatusWr
   stat.addf("x_imu_linear_acceleration", x_imu_linear_acceleration_string.str().c_str());
 }
 
+/*
+
+  La funzione y_imu_linear_acceleration_diagnostic implementa il rilevamento a soglia per la variabile y_imu_linear_acceleration creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void y_imu_linear_acceleration_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
   if(y_imu_linear_acceleration > y_imu_linear_acceleration_threshold) 
@@ -187,6 +243,13 @@ void y_imu_linear_acceleration_diagnostic(diagnostic_updater::DiagnosticStatusWr
   y_imu_linear_acceleration_string << y_imu_linear_acceleration;
   stat.addf("y_imu_linear_acceleration", y_imu_linear_acceleration_string.str().c_str());
 }
+
+/*
+
+  La funzione z_imu_linear_acceleration_diagnostic implementa il rilevamento a soglia per la variabile z_imu_linear_acceleration creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void z_imu_linear_acceleration_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
