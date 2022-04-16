@@ -1,8 +1,22 @@
+/*
+
+  Il codice implementa il nodo updater per l'odometry EKF della carrozzina. 
+  Raccoglie i dati dal topic /odometry/ekf_local ed effettua un rilevamento a soglia per individuare potenziali guasti dovuti a valori anomali dei sensori.
+  I messaggi diagnostici vengono pubblicati sul topic /diagnostics.
+
+*/
+
 #include <diagnostic_updater/diagnostic_updater.h>
 #include <std_msgs/Bool.h>
 #include <diagnostic_updater/publisher.h>
 #include <nav_msgs/Odometry.h>
 #include <sstream>
+
+/*
+
+  Variabili globali per la memorizzazione dei valori attuali dei sensori e delle soglie.
+
+*/
 
 float x_ekf_pose_position = 0.0;
 float x_ekf_pose_position_threshold = 0.0;
@@ -34,6 +48,11 @@ float y_ekf_twist_angular_threshold = 0.0;
 float z_ekf_twist_angular = 0.0;
 float z_ekf_twist_angular_threshold = 0.0;
 
+/*
+
+  La ekfPosePositionCallback permette di salvare nelle variabili globali i valori correnti dei sensori.
+
+*/
 
 void ekfPosePositionCallback(const nav_msgs::Odometry::ConstPtr& msg)
 {
@@ -55,6 +74,13 @@ void ekfPosePositionCallback(const nav_msgs::Odometry::ConstPtr& msg)
 
 }
 
+/*
+
+  La funzione xEkfPosePositionDiagostic implementa il rilevamento a soglia per la variabile x_ekf_pose_position creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void xEkfPosePositionDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   if (x_ekf_pose_position > x_ekf_pose_position_threshold)
@@ -70,6 +96,13 @@ void xEkfPosePositionDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat
   x_ekf_pose_position_string << x_ekf_pose_position;
   stat.addf("x Ekf Pose Position", x_ekf_pose_position_string.str().c_str());
 }
+
+/*
+
+  La funzione yEkfPosePositionDiagostic implementa il rilevamento a soglia per la variabile y_ekf_pose_position creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void yEkfPosePositionDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
@@ -87,6 +120,13 @@ void yEkfPosePositionDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat
   stat.addf("y Ekf Pose Position", y_ekf_pose_position_string.str().c_str());
 }
 
+/*
+
+  La funzione zEkfPosePositionDiagostic implementa il rilevamento a soglia per la variabile z_ekf_pose_position creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void zEkfPosePositionDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   if (z_ekf_pose_position > z_ekf_pose_position_threshold)
@@ -102,6 +142,13 @@ void zEkfPosePositionDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat
   z_ekf_pose_position_string << z_ekf_pose_position;
   stat.addf("z Ekf Pose Position", z_ekf_pose_position_string.str().c_str());
 }
+
+/*
+
+  La funzione xEkfPoseOrientationDiagostic implementa il rilevamento a soglia per la variabile x_ekf_pose_orientation creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void xEkfPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
@@ -119,6 +166,13 @@ void xEkfPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &s
   stat.addf("x Ekf Pose Orientation", x_ekf_pose_orientation_string.str().c_str());
 }
 
+/*
+
+  La funzione yEkfPoseOrientationDiagostic implementa il rilevamento a soglia per la variabile y_ekf_pose_orientation creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void yEkfPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   if (y_ekf_pose_orientation > y_ekf_pose_orientation_threshold)
@@ -134,6 +188,13 @@ void yEkfPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &s
   y_ekf_pose_orientation_string << y_ekf_pose_orientation;
   stat.addf("y Ekf Pose Orientation", y_ekf_pose_orientation_string.str().c_str());
 }
+
+/*
+
+  La funzione zEkfPoseOrientationDiagostic implementa il rilevamento a soglia per la variabile z_ekf_pose_orientation creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void zEkfPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
@@ -151,6 +212,13 @@ void zEkfPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &s
   stat.addf("z Ekf Pose Orientation", z_ekf_pose_orientation_string.str().c_str());
 }
 
+/*
+
+  La funzione wEkfPoseOrientationDiagostic implementa il rilevamento a soglia per la variabile w_ekf_pose_orientation creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void wEkfPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   if (w_ekf_pose_orientation > w_ekf_pose_orientation_threshold)
@@ -166,6 +234,13 @@ void wEkfPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &s
   w_ekf_pose_orientation_string << w_ekf_pose_orientation;
   stat.addf("w Ekf Pose Orientation", w_ekf_pose_orientation_string.str().c_str());
 }
+
+/*
+
+  La funzione xEkfTwistLinearDiagostic implementa il rilevamento a soglia per la variabile x_ekf_twist_linear creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void xEkfTwistLinearDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
@@ -183,6 +258,13 @@ void xEkfTwistLinearDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
   stat.addf("x Ekf Twist Linear", x_ekf_twist_linear_string.str().c_str());
 }
 
+/*
+
+  La funzione yEkfTwistLinearDiagostic implementa il rilevamento a soglia per la variabile y_ekf_twist_linear creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void yEkfTwistLinearDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   if (y_ekf_twist_linear > y_ekf_twist_linear_threshold)
@@ -198,6 +280,13 @@ void yEkfTwistLinearDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
   y_ekf_twist_linear_string << y_ekf_twist_linear;
   stat.addf("y Ekf Twist Linear", y_ekf_twist_linear_string.str().c_str());
 }
+
+/*
+
+  La funzione zEkfTwistLinearDiagostic implementa il rilevamento a soglia per la variabile z_ekf_twist_linear creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void zEkfTwistLinearDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
@@ -215,6 +304,13 @@ void zEkfTwistLinearDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
   stat.addf("z Ekf Twist Linear", z_ekf_twist_linear_string.str().c_str());
 }
 
+/*
+
+  La funzione xEkfTwistAngularDiagostic implementa il rilevamento a soglia per la variabile x_ekf_twist_angular creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void xEkfTwistAngularDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   if (x_ekf_twist_angular > x_ekf_twist_angular_threshold)
@@ -231,6 +327,13 @@ void xEkfTwistAngularDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat
   stat.addf("x Ekf Twist Angular", x_ekf_twist_angular_string.str().c_str());
 }
 
+/*
+
+  La funzione yEkfTwistAngularDiagostic implementa il rilevamento a soglia per la variabile y_ekf_twist_angular creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void yEkfTwistAngularDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   if (y_ekf_twist_angular > y_ekf_twist_angular_threshold)
@@ -246,6 +349,13 @@ void yEkfTwistAngularDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat
   y_ekf_twist_angular_string << y_ekf_twist_angular;
   stat.addf("y Ekf Twist Angular", y_ekf_twist_angular_string.str().c_str());
 }
+
+/*
+
+  La funzione zEkfTwistAngularDiagostic implementa il rilevamento a soglia per la variabile z_ekf_twist_angular creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void zEkfTwistAngularDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
@@ -271,6 +381,12 @@ int main(int argc, char **argv)
   diagnostic_updater::Updater ekf_updater;
   ekf_updater.setHardwareID("odometry/ekf_local");
 
+  /*
+    
+    Caricamento delle variabili globali con le soglie ottenute dai valori raccolti dal file YAML di configurazione.
+
+  */
+
   ekf_nh.getParam("/ekf_params/ekf_pose_position/x_threshold", x_ekf_pose_position_threshold);
   ekf_nh.getParam("/ekf_params/ekf_pose_position/y_threshold", y_ekf_pose_position_threshold);
   ekf_nh.getParam("/ekf_params/ekf_pose_position/z_threshold", z_ekf_pose_position_threshold);
@@ -288,8 +404,20 @@ int main(int argc, char **argv)
   ekf_nh.getParam("/ekf_params/ekf_twist_angular/y_threshold", y_ekf_twist_angular_threshold);
   ekf_nh.getParam("/ekf_params/ekf_twist_angular/z_threshold", z_ekf_twist_angular_threshold);
     
+  /*
+
+    Il metodo subscribe permette di sottoscriversi al topic /odometry/ekf_local per estrarne i messaggi. Il metodo richiama la funzione imuCallback.
+
+  */
+
   ros::Subscriber sub = ekf_nh.subscribe("odometry/ekf_local", 1000, ekfPosePositionCallback);
   
+  /*
+  
+    Il metodo add permette la creazione del diagnostico invocando la funzione che effettuerà il rilevamento a soglia.
+
+  */
+ 
   ekf_updater.add("Funzione di diagnostica della x ekf pose position", xEkfPosePositionDiagostic);
   ekf_updater.add("Funzione di diagnostica della y ekf pose position", yEkfPosePositionDiagostic);
   ekf_updater.add("Funzione di diagnostica della z ekf pose position", zEkfPosePositionDiagostic);

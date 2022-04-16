@@ -1,8 +1,22 @@
+/*
+
+  Il codice implementa il nodo updater odometrico per il diff drive controller della carrozzina. 
+  Raccoglie i dati dal topic /diff_drive_controller/odom ed effettua un rilevamento a soglia per individuare potenziali guasti dovuti a valori anomali dei sensori.
+  I messaggi diagnostici vengono pubblicati sul topic /diagnostics.
+
+*/
+
 #include <diagnostic_updater/diagnostic_updater.h>
 #include <std_msgs/Bool.h>
 #include <diagnostic_updater/publisher.h>
 #include <nav_msgs/Odometry.h>
 #include <sstream>
+
+/*
+
+  Variabili globali per la memorizzazione dei valori attuali dei sensori e delle soglie.
+
+*/
 
 float x_pose_position = 0.0;
 float x_pose_position_threshold = 0.0;
@@ -35,14 +49,17 @@ float y_twist_angular_threshold = 0.0;
 float z_twist_angular = 0.0;
 float z_twist_angular_threshold = 0.0;
 
+/*
+
+  La posePositionCallback permette di salvare nelle variabili globali i valori correnti dei sensori.
+
+*/
 
 void posePositionCallback(const nav_msgs::Odometry::ConstPtr& msg)
 {
   x_pose_position = msg->pose.pose.position.x;
   y_pose_position = msg->pose.pose.position.y;
   z_pose_position = msg->pose.pose.position.z;
-
-  //pose_covariance = msg->pose.covariance[1];
 
   x_pose_orientation = msg->pose.pose.orientation.x;
   y_pose_orientation = msg->pose.pose.orientation.y;
@@ -58,6 +75,13 @@ void posePositionCallback(const nav_msgs::Odometry::ConstPtr& msg)
   z_twist_angular = msg->twist.twist.angular.z;
 
 }
+
+/*
+
+  La funzione xPosePositionDiagostic implementa il rilevamento a soglia per la variabile x_pose_position creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void xPosePositionDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
@@ -75,6 +99,13 @@ void xPosePositionDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
   stat.addf("x Pose Position", x_pose_position_string.str().c_str());
 }
 
+/*
+
+  La funzione yPosePositionDiagostic implementa il rilevamento a soglia per la variabile y_pose_position creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void yPosePositionDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   if (y_pose_position > y_pose_position_threshold)
@@ -90,6 +121,13 @@ void yPosePositionDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
   y_pose_position_string << y_pose_position;
   stat.addf("y Pose Position", y_pose_position_string.str().c_str());
 }
+
+/*
+
+  La funzione zPosePositionDiagostic implementa il rilevamento a soglia per la variabile z_pose_position creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void zPosePositionDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
@@ -107,6 +145,13 @@ void zPosePositionDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
   stat.addf("z Pose Position", z_pose_position_string.str().c_str());
 }
 
+/*
+
+  La funzione xPoseOrientationDiagostic implementa il rilevamento a soglia per la variabile x_pose_orientation creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void xPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   if (x_pose_orientation > x_pose_orientation_threshold)
@@ -122,6 +167,13 @@ void xPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat
   x_pose_orientation_string << x_pose_orientation;
   stat.addf("x pose orientation", x_pose_orientation_string.str().c_str());
 }
+
+/*
+
+  La funzione yPoseOrientationDiagostic implementa il rilevamento a soglia per la variabile y_pose_orientation creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void yPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
@@ -139,6 +191,13 @@ void yPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat
   stat.addf("y pose orientation", y_pose_orientation_string.str().c_str());
 }
 
+/*
+
+  La funzione zPoseOrientationDiagostic implementa il rilevamento a soglia per la variabile z_pose_orientation creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void zPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   if (z_pose_orientation > z_pose_orientation_threshold)
@@ -154,6 +213,13 @@ void zPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat
   z_pose_orientation_string << z_pose_orientation;
   stat.addf("z pose orientation", z_pose_orientation_string.str().c_str());
 }
+
+/*
+
+  La funzione wPoseOrientationDiagostic implementa il rilevamento a soglia per la variabile w_pose_orientation creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void wPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
@@ -171,6 +237,13 @@ void wPoseOrientationDiagostic(diagnostic_updater::DiagnosticStatusWrapper &stat
   stat.addf("w pose orientation", w_pose_orientation_string.str().c_str());
 }
 
+/*
+
+  La funzione xTwistLinearDiagnostic implementa il rilevamento a soglia per la variabile x_twist_linear creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void xTwistLinearDiagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   if (x_twist_linear > x_twist_linear_threshold)
@@ -185,6 +258,13 @@ void xTwistLinearDiagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
   x_twist_linear_string << x_twist_linear;
   stat.addf("x Twist Linear", x_twist_linear_string.str().c_str());
 }
+
+/*
+
+  La funzione yTwistLinearDiagnostic implementa il rilevamento a soglia per la variabile y_twist_linear creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void yTwistLinearDiagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
@@ -201,6 +281,13 @@ void yTwistLinearDiagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
   stat.addf("y Twist Linear", y_twist_linear_string.str().c_str());
 }
 
+/*
+
+  La funzione zTwistLinearDiagnostic implementa il rilevamento a soglia per la variabile z_twist_linear creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void zTwistLinearDiagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   if (z_twist_linear > z_twist_linear_threshold)
@@ -215,6 +302,13 @@ void zTwistLinearDiagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
   z_twist_linear_string << z_twist_linear;
   stat.addf("z Twist Linear", z_twist_linear_string.str().c_str());
 }
+
+/*
+
+  La funzione xTwistAngularDiagnostic implementa il rilevamento a soglia per la variabile x_twist_angular creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void xTwistAngularDiagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
@@ -231,6 +325,13 @@ void xTwistAngularDiagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
   stat.addf("x Twist Angular", x_twist_angular_string.str().c_str());
 }
 
+/*
+
+  La funzione yTwistAngularDiagnostic implementa il rilevamento a soglia per la variabile y_twist_angular creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
+
 void yTwistAngularDiagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
   if (y_twist_angular > y_twist_angular_threshold)
@@ -245,6 +346,13 @@ void yTwistAngularDiagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
   y_twist_angular_string << y_twist_angular;
   stat.addf("y Twist Angular", y_twist_angular_string.str().c_str());
 }
+
+/*
+
+  La funzione zTwistAngularDiagnostic implementa il rilevamento a soglia per la variabile z_twist_angular creando il messaggio diagnostico
+  che viene pubblicato nel topic /diagnostics.
+  
+*/
 
 void zTwistAngularDiagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat)
 {
@@ -269,6 +377,12 @@ int main(int argc, char **argv)
   diagnostic_updater::Updater updater;
   updater.setHardwareID("diff_drive_controller/odom");
 
+  /*
+    
+    Caricamento delle variabili globali con le soglie ottenute dai valori raccolti dal file YAML di configurazione.
+
+  */
+
   nh.getParam("/odometry_diff_drive_params/odom_diff_drive_pose_position/x_threshold", x_pose_position_threshold);
   nh.getParam("/odometry_diff_drive_params/odom_diff_drive_pose_position/y_threshold", y_pose_position_threshold);
   nh.getParam("/odometry_diff_drive_params/odom_diff_drive_pose_position/z_threshold", z_pose_position_threshold);
@@ -286,8 +400,19 @@ int main(int argc, char **argv)
   nh.getParam("/odometry_diff_drive_params/odom_diff_drive_twist_angular/y_threshold", y_twist_angular_threshold);
   nh.getParam("/odometry_diff_drive_params/odom_diff_drive_twist_angular/z_threshold", z_twist_angular_threshold);
 
+  /*
+
+    Il metodo subscribe permette di sottoscriversi al topic /diff_drive_controller/odom per estrarne i messaggi. Il metodo richiama la funzione imuCallback.
+
+  */
+
   ros::Subscriber sub = nh.subscribe("diff_drive_controller/odom", 1000, posePositionCallback);
   
+  /*
+  
+    Il metodo add permette la creazione del diagnostico invocando la funzione che effettuerà il rilevamento a soglia.
+
+  */
   updater.add("Funzione di diagnostica della x pose position", xPosePositionDiagostic);
   updater.add("Funzione di diagnostica della y pose position", yPosePositionDiagostic);
   updater.add("Funzione di diagnostica della z pose position", zPosePositionDiagostic);
