@@ -269,7 +269,7 @@ int main(int argc, char **argv)
 
   /*
   
-    Il metodo add permette la creazione del diagnostico invocando la funzione che effettuerà il rilevamento a soglia.
+    Il metodo add permette la creazione del messaggio diagnostico invocando la funzione che effettuerà il rilevamento a soglia.
 
   */
   scan_updater.add("Funzione di diagnostica di angle_min", angle_min_diagnostic);

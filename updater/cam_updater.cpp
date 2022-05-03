@@ -1,18 +1,34 @@
+/*
+
+  Il codice implementa il nodo updater per la camera della carrozzina. 
+  Raccoglie i dati dal topic /camera_sensor/image_raw ed effettua un rilevamento a soglia per individuare potenziali guasti dovuti a valori anomali della camera.
+  I messaggi diagnostici vengono pubblicati sul topic /diagnostics.
+
+*/
+
 #include <diagnostic_updater/diagnostic_updater.h>
 #include <std_msgs/Bool.h>
 #include <diagnostic_updater/publisher.h>
-//#include "sensor_msgs/CameraInfo.h" // http://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/CameraInfo.html
-#include "sensor_msgs/Image.h"        // http://docs.ros.org/en/api/sensor_msgs/html/msg/Image.html
-#include <sstream>
+#include "sensor_msgs/Image.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
 #include <string>
 
+/*
+
+  Variabili globali per la memorizzazione dei valori attuali dei sensori e delle soglie.
+
+*/
 
 std::vector<uint8_t> raw_image;
 uint32_t step = 0;
 
+/*
+
+  La callback permette di salvare nelle variabili globali i valori correnti della camera.
+
+*/
 
 void callback(const sensor_msgs::Image::ConstPtr& msg)
 {
@@ -20,10 +36,15 @@ void callback(const sensor_msgs::Image::ConstPtr& msg)
   raw_image = msg -> data;
   step = msg -> step;
 
-  //ROS_INFO("step: %d\n", step);
-
 }
 
+/*
+
+  La funzione camera_sensor_diagnostic va a verificare la grandezza del vettore contenente i dati
+  pubblicati della camera: se la grandezza dell'array ricevuto non è coerente con quanto specificato
+  nella documentazione verrà pubblicato sul topic /diagnostics un messaggio di warning.
+  
+*/
 
 void camera_sensor_diagnostic(diagnostic_updater::DiagnosticStatusWrapper &stat){
 
